@@ -170,6 +170,22 @@ nav .ic{display:none}
  .row label{margin-bottom:-4px}
  #orn{align-items:start}
 }
+.bf{transition:stroke .2s}
+#tree .bf.hv{stroke:#f7d36b}
+.stage{background:#fbf1cf}
+.tsteps{grid-column:1/2;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:12px 14px;box-shadow:var(--shadow);display:grid;gap:10px}
+.tcr{display:flex;flex-wrap:wrap;gap:4px;align-items:center;color:var(--mute)}
+.tcr button,.tnext button{border:1px solid var(--line);border-left:5px solid var(--c);background:var(--paper);color:var(--ink);border-radius:10px;padding:5px 10px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;min-height:38px}
+.tcr i{font-style:normal;font-size:11px;color:var(--mute);margin-right:5px}
+.tnext small{display:block;color:var(--mute);margin-bottom:6px}
+.tnext div{display:flex;flex-wrap:wrap;gap:6px}
+.tnext em{font-style:normal;font-size:12px;color:var(--mute);font-weight:600}
+.tnext button:hover,.tcr button:hover{background:var(--soft)}
+.tnext .pri{background:var(--acc);color:#fff;border-color:transparent}
+.tback{justify-self:start;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:10px;padding:0 14px;min-height:40px;font:inherit;font-weight:700;cursor:pointer}
+#v-tree>.card{grid-column:2;grid-row:1/span 2}
+@media(max-width:900px){.tsteps{grid-column:1}#v-tree>.card{grid-column:1;grid-row:auto}}
+@media(max-width:700px){.stage{height:auto!important;aspect-ratio:1/1.02;min-height:0}}
 footer{padding:18px max(4vw,14px) 36px;font-size:13px;color:var(--mute)}
 footer a{color:var(--ink)}
 #pick{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:#1b2326aa;backdrop-filter:blur(6px)}
@@ -231,14 +247,15 @@ footer a{color:var(--ink)}
 
 <section class="view" id="v-tree">
   <div class="stage" id="stage">
-    <svg id="land" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
+    <svg id="land" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"></svg>
     <svg id="tree" role="img"></svg>
     <div class="hint" data-t="hint"></div>
     <div class="tip" id="tip"></div>
-    <div class="tools"><button id="zin">+</button><button id="zout">−</button><button id="zfit">⤢</button><button id="zall">≡</button></div>
+    <div class="tools"><button id="zin">+</button><button id="zout">−</button><button id="zfit">⤢</button><button id="zall">⟲</button></div>
     <div class="legend" id="legend"></div>
     <div class="msheet" id="msheet" hidden></div>
   </div>
+  <div class="tsteps" id="tsteps"></div>
   <aside class="card" id="card" aria-live="polite"></aside>
 </section>
 
@@ -669,9 +686,9 @@ footer a{color:var(--ink)}
 {
 /* ---------- i18n ---------- */
 const S={
-kk:{h1a:"Бәйтерек",h1b:"Қазақ шежіресі",title:"Бәйтерек · Қазақ шежіресі",sub:"Алаштан бастап үш жүзге, тайпа мен руға дейін. Руыңызды тауып, жеті атаңызды жалғаңыз.",ph:"Руыңыз: Арғын, Адай, Дулат, Тобықты…",nf:"Табылмады. Басқаша жазып көріңіз",tabTree:"Шежіре ағашы",tabMap:"Қоныс картасы",tabMe:"Менің жеті атам",hint:"Жапырақты басыңыз — тармағы ашылады. Жылжытып, үлкейтіңіз.",zin:"Үлкейту",zout:"Кішірейту",zfit:"Бәрін көрсету",zall:"Бәрін ашу / жабу",alt:"Орысша",gen:"Буын",genv:n=>`Алаштан ${n}-буын`,uran:"Ұраны",reg:"Қонысы",pop:"Саны",popv:x=>`≈ ${x} адам`,kids:"Тармағы",kidsv:(a,b)=>`${a} тікелей, барлығы ${b}`,mine:"Бұл менің руым",mapH:"Қай ру қайда?",mapNote:"XIX ғасыр соңы – XX ғасыр басындағы негізгі қоныстар (Востров, Муканов бойынша жалпылама). Нүктені басыңыз.",scale:"Схема, масштаб шартты",open:"Шежіреден ашу",meH:"Жеті атаңызды жазыңыз",meNote:"Руыңызды таңдап, әкеңізден бастап жеті атаңыздың атын жазыңыз. Деректер тек осы құрылғыда сақталады.",self:"Өзіңіз",namePh:"Атыңыз",yourRu:"Руыңыз",choose:"— таңдаңыз —",ataPh:"Аты",ATA:["Әкеңіз","Атаңыз","Арғы атаңыз","Бабаңыз","5-ата","6-ата","7-ата"],copy:"Көшіру",showTree:"Ағаштан көрсету",clear:"Тазалау",copied:"Көшірілді ✓",copyFail:"Көшіру мүмкін болмады: ",pickFirst:"Алдымен руыңызды таңдаңыз",chainH:"Сіздің шежіреңіз",chainEmpty:"Руыңызды таңдаңыз — шежіре осында жалғанады",rRoot:"Түп ата",rZhuz:"Жүз",rBranch:"Ру тармағы",gap:"… ата-бабалар …",ataN:i=>`${i}-ата`,you:"Сіз",youRole:"Өзіңіз",prefix:"Менің шежірем: ",meWord:"Мен",foot:"Шежіре нұсқалары әр ру мен кітапта әртүрлі. Тармақтар — Востров пен Муканов (1968, 1974), Википедия, skezire.kz, Pavlodarica және ғылыми мақалалар бойынша; кейбір төменгі буындар мен ұрандар — кең тараған нұсқалар. Халық саны — zakon.kz жинағындағы шамалы бағалау (2014). Дереккөздер:",idea:"Идея — Cheapside.kz шежіре-картасы.",treeLabel:"Шежіре ағашы",tabRoute:"Қадамдап",rtH:"Жеті буын жолы",rtNote:"Алаштан бастап әр буынды таңдап, руыңызға дейін жетіңіз. Жоғарыдағы жолдан кез келген буынға қайта оралуға болады.",back:"← Артқа",next:l=>`Келесі буынды таңдаңыз (${l})`,rtDone:"Тармақтың соңына жеттіңіз — бұл біздің базадағы ең төменгі буын.",restart:"Басынан бастау",LV:["Түп ата","Жүз","3-буын","4-буын","5-буын","6-буын","7-буын"],items:n=>n?`${n} тармақ`:"соңғы буын",ownAta:"өз аталарыңыз",here:"сіз осындасыз",keys:"Пернетақта: 1–9 — таңдау, ← немесе Backspace — артқа.",inside:"Ішінде",filterPh:"Тізімнен іздеу…",stepOf:a=>`${a}-буын / 7`,filled:n=>`Толтырылды: ${n} / 7`,openRoute:"Осы жолмен жүру",more:n=>`тағы ${n}`,ornBtn:"Руымның оюын жасау",ornH:r=>`${r} руының оюы`,ornNote:"Бұл ою руыңыздың шежіре жолынан жасалды — әр руға өзгеше. Суретті басып тұрып сақтаңыз немесе WhatsApp-қа жіберіңіз.",ornHonest:"Бұл руының тарихи таңбасы емес — дәстүрлі ою-өрнек мотивтерінен құралған.",ornAgain:"Басқа нұсқа",close:"Жабу",motifs:"Мотивтер",M:["қошқар мүйіз","сыңар мүйіз","түйе табан","құс қанаты"],desc:(nm,ru)=>`${nm} — ${ru} ұрпағы`,ornSave:"Суретті сақтау үшін басып тұрыңыз",details:"Толығырақ",mapHint:"Картаны екі саусақпен үлкейтуге болады"},
-ru:{h1a:"Байтерек",h1b:"Родословная казахов",title:"Байтерек — родословная казахов (шежире)",sub:"Казахское шежире: от прародителя Алаша через три жуза к племенам и родам. Узнайте свой род и проследите предков до седьмого колена.",ph:"Ваш род: Аргын, Адай, Дулат, Тобыкты…",nf:"Не найдено. Попробуйте написать иначе",tabTree:"Родословное древо",tabMap:"Где кочевали роды",tabMe:"Жеты ата — мои предки",hint:"Нажмите на лист — раскроется ветвь. Древо можно двигать и приближать.",zin:"Приблизить",zout:"Отдалить",zfit:"Показать всё",zall:"Раскрыть / свернуть всё",alt:"По-казахски",gen:"Поколение",genv:n=>`${n}-е колено от Алаша`,uran:"Уран (клич)",reg:"Расселение",pop:"Численность",popv:x=>`≈ ${x} чел.`,kids:"Ветви",kidsv:(a,b)=>`${a} прямых, всего ${b}`,mine:"Это мой род",mapH:"Где какой род?",mapNote:"Основные кочевья конца XIX – начала XX в. (обобщённо, по Вострову и Муканову). Нажмите на точку.",scale:"Схема, масштаб условный",open:"Открыть в древе",meH:"Запишите своих предков до седьмого колена",meNote:"Выберите род и впишите имена предков, начиная с отца. Данные хранятся только на этом устройстве.",self:"Вы",namePh:"Ваше имя",yourRu:"Ваш род",choose:"— выберите —",ataPh:"Имя",ATA:["Отец","Дед","Прадед","Прапрадед","5-й предок","6-й предок","7-й предок"],copy:"Копировать",showTree:"Показать в древе",clear:"Очистить",copied:"Скопировано ✓",copyFail:"Не удалось скопировать: ",pickFirst:"Сначала выберите род",chainH:"Ваша родословная",chainEmpty:"Выберите род — шежире продолжится здесь",rRoot:"Прародитель",rZhuz:"Жуз",rBranch:"Ветвь рода",gap:"… предки …",ataN:i=>`${i}-й предок`,you:"Вы",youRole:"Вы сами",prefix:"Моё шежире: ",meWord:"Я",foot:"Версии шежире различаются в разных родах и книгах. Ветви — по Вострову и Муканову (1968, 1974), Википедии, skezire.kz, Pavlodarica и научным статьям; часть нижних колен и уранов — распространённые версии. Численность — приблизительная оценка из подборки zakon.kz (2014). Источники:",idea:"Идея — шежире-карта Cheapside.kz.",treeLabel:"Родословное древо",tabRoute:"Шаг за шагом",rtH:"Путь через семь колен",rtNote:"Начните с Алаша и выбирайте колено за коленом, пока не дойдёте до своего рода. В ленте наверху можно вернуться на любой шаг.",back:"← Назад",next:l=>`Выберите следующее колено (${l.toLowerCase()})`,rtDone:"Вы дошли до конца ветви — это самое нижнее подразделение в нашей базе.",restart:"Начать сначала",LV:["Прародитель","Жуз","3-е колено","4-е колено","5-е колено","6-е колено","7-е колено"],items:n=>n?`ответвлений: ${n}`:"последнее колено",ownAta:"ваши предки",here:"вы здесь",keys:"Клавиатура: 1–9 — выбрать, ← или Backspace — назад.",inside:"Внутри",filterPh:"Найти в списке…",stepOf:a=>`Колено ${a} из 7`,filled:n=>`Заполнено: ${n} из 7`,openRoute:"Пройти этот путь",more:n=>`ещё ${n}`,ornBtn:"Создать орнамент моего рода",ornH:r=>`Орнамент рода ${r}`,ornNote:"Орнамент собран по пути вашего рода в шежире — у каждого рода он свой. Нажмите и удерживайте картинку, чтобы сохранить или отправить в WhatsApp.",ornHonest:"Это не историческая тамга рода, а узор из традиционных казахских мотивов ою-өрнек.",ornAgain:"Другой вариант",close:"Закрыть",motifs:"Мотивы",M:["қошқар мүйіз (бараньи рога)","сыңар мүйіз (одинарный рог)","түйе табан (след верблюда)","құс қанаты (птичье крыло)"],desc:(nm,ru)=>`${nm} — потомок рода ${ru}`,ornSave:"Нажмите и удерживайте, чтобы сохранить",details:"Подробнее",mapHint:"Карту можно приближать двумя пальцами"},
-en:{h1a:"Baiterek",h1b:"Kazakh family tree",title:"Baiterek · Kazakh family tree",sub:"From Alash to the three zhuzes, tribes and clans. Find your ru (clan) and trace your ancestors back seven generations.",ph:"Your clan: Argyn, Adai, Dulat, Tobykty…",nf:"Not found. Try another spelling",tabTree:"Family tree",tabMap:"Settlement map",tabMe:"My seven ancestors",hint:"Tap a leaf to open its branch. Drag and zoom.",zin:"Zoom in",zout:"Zoom out",zfit:"Show all",zall:"Expand / collapse all",alt:"In Kazakh",gen:"Generation",genv:n=>`${n} from Alash`,uran:"Uran (battle cry)",reg:"Lands",pop:"Population",popv:x=>`≈ ${x} people`,kids:"Branches",kidsv:(a,b)=>`${a} direct, ${b} in total`,mine:"This is my clan",mapH:"Which clan lived where?",mapNote:"Main lands in the late 19th – early 20th century (generalised, after Vostrov and Mukanov). Tap a dot.",scale:"Schematic, not to scale",open:"Open in tree",meH:"Write down your seven ancestors",meNote:"Choose your clan and enter your ancestors' names, starting with your father. Data stays on this device only.",self:"You",namePh:"Your name",yourRu:"Your clan",choose:"— choose —",ataPh:"Name",ATA:["Father","Grandfather","Great-grandfather","2nd great-grandfather","5th ancestor","6th ancestor","7th ancestor"],copy:"Copy",showTree:"Show in tree",clear:"Clear",copied:"Copied ✓",copyFail:"Could not copy: ",pickFirst:"Choose your clan first",chainH:"Your shezhire",chainEmpty:"Choose your clan — your line continues here",rRoot:"Forefather",rZhuz:"Zhuz",rBranch:"Clan branch",gap:"… ancestors …",ataN:i=>`ancestor ${i}`,you:"You",youRole:"Yourself",prefix:"My shezhire: ",meWord:"Me",foot:"Shezhire versions differ between clans and books. Branches follow Vostrov and Mukanov (1968, 1974), Wikipedia, skezire.kz, Pavlodarica and research papers; some lower branches and urans are widespread versions. Population is a rough estimate from a zakon.kz compilation (2014). Sources:",idea:"Inspired by the Cheapside.kz shezhire map.",treeLabel:"Family tree",tabRoute:"Step by step",rtH:"The seven-generation path",rtNote:"Start from Alash and pick one generation at a time until you reach your clan. Tap any step in the path above to go back.",back:"← Back",next:l=>`Choose the next generation (${l.toLowerCase()})`,rtDone:"You have reached the end of this branch — the lowest subdivision in our data.",restart:"Start over",LV:["Forefather","Zhuz","Generation 3","Generation 4","Generation 5","Generation 6","Generation 7"],items:n=>n?`${n} branches`:"last generation",ownAta:"your own ancestors",here:"you are here",keys:"Keyboard: 1–9 to choose, ← or Backspace to go back.",inside:"Inside",filterPh:"Filter the list…",stepOf:a=>`Generation ${a} of 7`,filled:n=>`Filled in: ${n} of 7`,openRoute:"Walk this path",more:n=>`${n} more`,ornBtn:"Create my clan's ornament",ornH:r=>`${r} clan ornament`,ornNote:"This ornament is built from your clan's path in the shezhire — every clan gets its own. Long-press the image to save it or send it on WhatsApp.",ornHonest:"Not a historical tamga — a pattern made of traditional Kazakh ornament motifs.",ornAgain:"Another version",close:"Close",motifs:"Motifs",M:["qoshqar müiz (ram's horns)","synar müiz (single horn)","tüie taban (camel's foot)","qus qanaty (bird's wing)"],desc:(nm,ru)=>`${nm}, of the ${ru} clan`,ornSave:"Long-press to save",details:"Details",mapHint:"Pinch to zoom the map"}};
+kk:{h1a:"Бәйтерек",h1b:"Қазақ шежіресі",title:"Бәйтерек · Қазақ шежіресі",sub:"Алаштан бастап үш жүзге, тайпа мен руға дейін. Руыңызды тауып, жеті атаңызды жалғаңыз.",ph:"Руыңыз: Арғын, Адай, Дулат, Тобықты…",nf:"Табылмады. Басқаша жазып көріңіз",tabTree:"Шежіре ағашы",tabMap:"Қоныс картасы",tabMe:"Менің жеті атам",hint:"Бұтақты басыңыз — оның жолы жарықталады. Төмендегі батырмалармен буыннан буынға өтіңіз.",zin:"Үлкейту",zout:"Кішірейту",zfit:"Бәрін көрсету",zall:"Бәрін ашу / жабу",alt:"Орысша",gen:"Буын",genv:n=>`Алаштан ${n}-буын`,uran:"Ұраны",reg:"Қонысы",pop:"Саны",popv:x=>`≈ ${x} адам`,kids:"Тармағы",kidsv:(a,b)=>`${a} тікелей, барлығы ${b}`,mine:"Бұл менің руым",mapH:"Қай ру қайда?",mapNote:"XIX ғасыр соңы – XX ғасыр басындағы негізгі қоныстар (Востров, Муканов бойынша жалпылама). Нүктені басыңыз.",scale:"Схема, масштаб шартты",open:"Шежіреден ашу",meH:"Жеті атаңызды жазыңыз",meNote:"Руыңызды таңдап, әкеңізден бастап жеті атаңыздың атын жазыңыз. Деректер тек осы құрылғыда сақталады.",self:"Өзіңіз",namePh:"Атыңыз",yourRu:"Руыңыз",choose:"— таңдаңыз —",ataPh:"Аты",ATA:["Әкеңіз","Атаңыз","Арғы атаңыз","Бабаңыз","5-ата","6-ата","7-ата"],copy:"Көшіру",showTree:"Ағаштан көрсету",clear:"Тазалау",copied:"Көшірілді ✓",copyFail:"Көшіру мүмкін болмады: ",pickFirst:"Алдымен руыңызды таңдаңыз",chainH:"Сіздің шежіреңіз",chainEmpty:"Руыңызды таңдаңыз — шежіре осында жалғанады",rRoot:"Түп ата",rZhuz:"Жүз",rBranch:"Ру тармағы",gap:"… ата-бабалар …",ataN:i=>`${i}-ата`,you:"Сіз",youRole:"Өзіңіз",prefix:"Менің шежірем: ",meWord:"Мен",foot:"Шежіре нұсқалары әр ру мен кітапта әртүрлі. Тармақтар — Востров пен Муканов (1968, 1974), Википедия, skezire.kz, Pavlodarica және ғылыми мақалалар бойынша; кейбір төменгі буындар мен ұрандар — кең тараған нұсқалар. Халық саны — zakon.kz жинағындағы шамалы бағалау (2014). Дереккөздер:",idea:"Идея — Cheapside.kz шежіре-картасы.",treeLabel:"Шежіре ағашы",tabRoute:"Қадамдап",rtH:"Жеті буын жолы",rtNote:"Алаштан бастап әр буынды таңдап, руыңызға дейін жетіңіз. Жоғарыдағы жолдан кез келген буынға қайта оралуға болады.",back:"← Артқа",next:l=>`Келесі буынды таңдаңыз (${l})`,rtDone:"Тармақтың соңына жеттіңіз — бұл біздің базадағы ең төменгі буын.",restart:"Басынан бастау",LV:["Түп ата","Жүз","3-буын","4-буын","5-буын","6-буын","7-буын"],items:n=>n?`${n} тармақ`:"соңғы буын",ownAta:"өз аталарыңыз",here:"сіз осындасыз",keys:"Пернетақта: 1–9 — таңдау, ← немесе Backspace — артқа.",inside:"Ішінде",filterPh:"Тізімнен іздеу…",stepOf:a=>`${a}-буын / 7`,filled:n=>`Толтырылды: ${n} / 7`,openRoute:"Осы жолмен жүру",more:n=>`тағы ${n}`,ornBtn:"Руымның оюын жасау",ornH:r=>`${r} руының оюы`,ornNote:"Бұл ою руыңыздың шежіре жолынан жасалды — әр руға өзгеше. Суретті басып тұрып сақтаңыз немесе WhatsApp-қа жіберіңіз.",ornHonest:"Бұл руының тарихи таңбасы емес — дәстүрлі ою-өрнек мотивтерінен құралған.",ornAgain:"Басқа нұсқа",close:"Жабу",motifs:"Мотивтер",M:["қошқар мүйіз","сыңар мүйіз","түйе табан","құс қанаты"],desc:(nm,ru)=>`${nm} — ${ru} ұрпағы`,ornSave:"Суретті сақтау үшін басып тұрыңыз",details:"Толығырақ",mapHint:"Картаны екі саусақпен үлкейтуге болады"},
+ru:{h1a:"Байтерек",h1b:"Родословная казахов",title:"Байтерек — родословная казахов (шежире)",sub:"Казахское шежире: от прародителя Алаша через три жуза к племенам и родам. Узнайте свой род и проследите предков до седьмого колена.",ph:"Ваш род: Аргын, Адай, Дулат, Тобыкты…",nf:"Не найдено. Попробуйте написать иначе",tabTree:"Родословное древо",tabMap:"Где кочевали роды",tabMe:"Жеты ата — мои предки",hint:"Нажмите на ветку — подсветится её путь. Ниже можно идти колено за коленом.",zin:"Приблизить",zout:"Отдалить",zfit:"Показать всё",zall:"Раскрыть / свернуть всё",alt:"По-казахски",gen:"Поколение",genv:n=>`${n}-е колено от Алаша`,uran:"Уран (клич)",reg:"Расселение",pop:"Численность",popv:x=>`≈ ${x} чел.`,kids:"Ветви",kidsv:(a,b)=>`${a} прямых, всего ${b}`,mine:"Это мой род",mapH:"Где какой род?",mapNote:"Основные кочевья конца XIX – начала XX в. (обобщённо, по Вострову и Муканову). Нажмите на точку.",scale:"Схема, масштаб условный",open:"Открыть в древе",meH:"Запишите своих предков до седьмого колена",meNote:"Выберите род и впишите имена предков, начиная с отца. Данные хранятся только на этом устройстве.",self:"Вы",namePh:"Ваше имя",yourRu:"Ваш род",choose:"— выберите —",ataPh:"Имя",ATA:["Отец","Дед","Прадед","Прапрадед","5-й предок","6-й предок","7-й предок"],copy:"Копировать",showTree:"Показать в древе",clear:"Очистить",copied:"Скопировано ✓",copyFail:"Не удалось скопировать: ",pickFirst:"Сначала выберите род",chainH:"Ваша родословная",chainEmpty:"Выберите род — шежире продолжится здесь",rRoot:"Прародитель",rZhuz:"Жуз",rBranch:"Ветвь рода",gap:"… предки …",ataN:i=>`${i}-й предок`,you:"Вы",youRole:"Вы сами",prefix:"Моё шежире: ",meWord:"Я",foot:"Версии шежире различаются в разных родах и книгах. Ветви — по Вострову и Муканову (1968, 1974), Википедии, skezire.kz, Pavlodarica и научным статьям; часть нижних колен и уранов — распространённые версии. Численность — приблизительная оценка из подборки zakon.kz (2014). Источники:",idea:"Идея — шежире-карта Cheapside.kz.",treeLabel:"Родословное древо",tabRoute:"Шаг за шагом",rtH:"Путь через семь колен",rtNote:"Начните с Алаша и выбирайте колено за коленом, пока не дойдёте до своего рода. В ленте наверху можно вернуться на любой шаг.",back:"← Назад",next:l=>`Выберите следующее колено (${l.toLowerCase()})`,rtDone:"Вы дошли до конца ветви — это самое нижнее подразделение в нашей базе.",restart:"Начать сначала",LV:["Прародитель","Жуз","3-е колено","4-е колено","5-е колено","6-е колено","7-е колено"],items:n=>n?`ответвлений: ${n}`:"последнее колено",ownAta:"ваши предки",here:"вы здесь",keys:"Клавиатура: 1–9 — выбрать, ← или Backspace — назад.",inside:"Внутри",filterPh:"Найти в списке…",stepOf:a=>`Колено ${a} из 7`,filled:n=>`Заполнено: ${n} из 7`,openRoute:"Пройти этот путь",more:n=>`ещё ${n}`,ornBtn:"Создать орнамент моего рода",ornH:r=>`Орнамент рода ${r}`,ornNote:"Орнамент собран по пути вашего рода в шежире — у каждого рода он свой. Нажмите и удерживайте картинку, чтобы сохранить или отправить в WhatsApp.",ornHonest:"Это не историческая тамга рода, а узор из традиционных казахских мотивов ою-өрнек.",ornAgain:"Другой вариант",close:"Закрыть",motifs:"Мотивы",M:["қошқар мүйіз (бараньи рога)","сыңар мүйіз (одинарный рог)","түйе табан (след верблюда)","құс қанаты (птичье крыло)"],desc:(nm,ru)=>`${nm} — потомок рода ${ru}`,ornSave:"Нажмите и удерживайте, чтобы сохранить",details:"Подробнее",mapHint:"Карту можно приближать двумя пальцами"},
+en:{h1a:"Baiterek",h1b:"Kazakh family tree",title:"Baiterek · Kazakh family tree",sub:"From Alash to the three zhuzes, tribes and clans. Find your ru (clan) and trace your ancestors back seven generations.",ph:"Your clan: Argyn, Adai, Dulat, Tobykty…",nf:"Not found. Try another spelling",tabTree:"Family tree",tabMap:"Settlement map",tabMe:"My seven ancestors",hint:"Tap a branch to light up its path. Use the buttons below to go generation by generation.",zin:"Zoom in",zout:"Zoom out",zfit:"Show all",zall:"Expand / collapse all",alt:"In Kazakh",gen:"Generation",genv:n=>`${n} from Alash`,uran:"Uran (battle cry)",reg:"Lands",pop:"Population",popv:x=>`≈ ${x} people`,kids:"Branches",kidsv:(a,b)=>`${a} direct, ${b} in total`,mine:"This is my clan",mapH:"Which clan lived where?",mapNote:"Main lands in the late 19th – early 20th century (generalised, after Vostrov and Mukanov). Tap a dot.",scale:"Schematic, not to scale",open:"Open in tree",meH:"Write down your seven ancestors",meNote:"Choose your clan and enter your ancestors' names, starting with your father. Data stays on this device only.",self:"You",namePh:"Your name",yourRu:"Your clan",choose:"— choose —",ataPh:"Name",ATA:["Father","Grandfather","Great-grandfather","2nd great-grandfather","5th ancestor","6th ancestor","7th ancestor"],copy:"Copy",showTree:"Show in tree",clear:"Clear",copied:"Copied ✓",copyFail:"Could not copy: ",pickFirst:"Choose your clan first",chainH:"Your shezhire",chainEmpty:"Choose your clan — your line continues here",rRoot:"Forefather",rZhuz:"Zhuz",rBranch:"Clan branch",gap:"… ancestors …",ataN:i=>`ancestor ${i}`,you:"You",youRole:"Yourself",prefix:"My shezhire: ",meWord:"Me",foot:"Shezhire versions differ between clans and books. Branches follow Vostrov and Mukanov (1968, 1974), Wikipedia, skezire.kz, Pavlodarica and research papers; some lower branches and urans are widespread versions. Population is a rough estimate from a zakon.kz compilation (2014). Sources:",idea:"Inspired by the Cheapside.kz shezhire map.",treeLabel:"Family tree",tabRoute:"Step by step",rtH:"The seven-generation path",rtNote:"Start from Alash and pick one generation at a time until you reach your clan. Tap any step in the path above to go back.",back:"← Back",next:l=>`Choose the next generation (${l.toLowerCase()})`,rtDone:"You have reached the end of this branch — the lowest subdivision in our data.",restart:"Start over",LV:["Forefather","Zhuz","Generation 3","Generation 4","Generation 5","Generation 6","Generation 7"],items:n=>n?`${n} branches`:"last generation",ownAta:"your own ancestors",here:"you are here",keys:"Keyboard: 1–9 to choose, ← or Backspace to go back.",inside:"Inside",filterPh:"Filter the list…",stepOf:a=>`Generation ${a} of 7`,filled:n=>`Filled in: ${n} of 7`,openRoute:"Walk this path",more:n=>`${n} more`,ornBtn:"Create my clan's ornament",ornH:r=>`${r} clan ornament`,ornNote:"This ornament is built from your clan's path in the shezhire — every clan gets its own. Long-press the image to save it or send it on WhatsApp.",ornHonest:"Not a historical tamga — a pattern made of traditional Kazakh ornament motifs.",ornAgain:"Another version",close:"Close",motifs:"Motifs",M:["qoshqar müiz (ram's horns)","synar müiz (single horn)","tüie taban (camel's foot)","qus qanaty (bird's wing)"],desc:(nm,ru)=>`${nm}, of the ${ru} clan`,ornSave:"Long-press to save",details:"Details",mapHint:"Pinch to zoom the map"}};
 const ZH={"Ұлы жүз":{ru:"Старший жуз",en:"Senior Zhuz"},"Орта жүз":{ru:"Средний жуз",en:"Middle Zhuz"},"Кіші жүз":{ru:"Младший жуз",en:"Junior Zhuz"},"Жүзден тыс":{ru:"Вне жузов",en:"Outside the zhuzes"},"Алаш":{ru:"Алаш",en:"Alash"}};
 const LAT={а:"a",ә:"a",б:"b",в:"v",г:"g",ғ:"gh",д:"d",е:"e",ё:"yo",ж:"zh",з:"z",и:"i",й:"i",к:"k",қ:"q",л:"l",м:"m",н:"n",ң:"ng",о:"o",ө:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ұ:"u",ү:"u",ф:"f",х:"kh",һ:"h",ц:"ts",ч:"ch",ш:"sh",щ:"shch",ъ:"",ы:"y",і:"i",ь:"",э:"e",ю:"yu",я:"ya"};
 const lat=s=>s.replace(/[а-яёәғқңөұүһі]/gi,ch=>{const l=ch.toLowerCase(),r=LAT[l]??ch;return ch===l?r:r.charAt(0).toUpperCase()+r.slice(1)});
@@ -703,92 +720,100 @@ const zn=z=>L==="kk"?z:ZH[z][L];
 const tr=(dict,s)=>!s||L==="kk"?s:(window.TR[dict][s]||[s,s])[L==="ru"?0:1];
 const uranTx=u=>L==="ru"?toRu(u):L==="en"?lat(u):u;
 
-/* ---------- landscape (illustrated) ---------- */
-{
-  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
-  const ridge=(y0,amp,step,fill,snow)=>{let pts=[[0,900],[0,y0]],peaks=[];let x=0;
-    while(x<1600){const px=x+step*(0.5+rnd()*0.6),py=y0-amp*(0.35+rnd()*0.65);pts.push([px,py]);peaks.push([px,py]);const vx=px+step*(0.4+rnd()*0.5);pts.push([vx,y0-amp*rnd()*0.3]);x=vx}
-    pts.push([1600,y0],[1600,900]);
-    let s=`<path d="M${pts.map(p=>p.map(v=>v.toFixed(0)).join(",")).join("L")}Z" fill="var(${fill})"/>`;
-    if(snow)for(const[px,py]of peaks){if(py<y0-amp*0.55){const h=(y0-py)*0.28;s+=`<path d="M${px},${py} l${-h*0.9},${h} l${h*0.3},${-h*0.25} l${h*0.3},${h*0.3} l${h*0.35},${-h*0.35} l${h*0.45},${h*0.3}Z" fill="var(--snow)"/>`}}
-    return s};
-  const hill=(y,a,f,ph)=>{let d=`M0,900L0,${y}`;for(let x=0;x<=1600;x+=40)d+=`L${x},${(y+Math.sin(x/260+ph)*a+Math.sin(x/90+ph*2)*a*0.25).toFixed(1)}`;return`<path d="${d}L1600,900Z" fill="var(${f})"/>`};
-  const yurt=(x,y,s)=>`<g transform="translate(${x},${y}) scale(${s})"><path d="M-22,0 L-22,-14 Q0,-34 22,-14 L22,0Z" fill="#fbf6ea" stroke="#8a6a44" stroke-width="2"/><path d="M-6,0 V-10 H6 V0Z" fill="#c0392b"/><path d="M-22,-14 Q0,-26 22,-14" fill="none" stroke="#c0392b" stroke-width="2.5"/></g>`;
-  document.getElementById("land").innerHTML=`<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sky1)"/><stop offset=".55" style="stop-color:var(--sky2)"/><stop offset="1" style="stop-color:var(--sky3)"/></linearGradient>
-   <radialGradient id="glow"><stop offset="0" style="stop-color:var(--sun)" stop-opacity=".8"/><stop offset="1" style="stop-color:var(--sun)" stop-opacity="0"/></radialGradient></defs>
-   <rect width="1600" height="900" fill="url(#sky)"/>
-   <circle cx="1270" cy="190" r="190" fill="url(#glow)"/><circle cx="1270" cy="190" r="62" style="fill:var(--sun)"/>
-   <g opacity=".8"><path d="M240,160 q14,-10 28,0 q14,-10 28,0" fill="none" stroke="#6f8a96" stroke-width="2.5"/><path d="M330,120 q10,-7 20,0 q10,-7 20,0" fill="none" stroke="#6f8a96" stroke-width="2"/></g>
-   ${ridge(560,300,150,"--m1",true)}${ridge(640,190,120,"--m2",true)}${hill(690,22,"--h1",1)}${hill(760,18,"--h2",3)}
-   ${yurt(260,742,1.1)}${yurt(330,750,.9)}${yurt(1350,770,1.2)}${hill(840,14,"--h3",5)}`;
-}
+/* ---------- poster paper ---------- */
+{let o="";for(let i=0;i<40;i++){const x=20+i*40;o+=`<path d="M${x},8 q10,10 20,0 q10,-10 20,0" /><path d="M${x},892 q10,-10 20,0 q10,10 20,0" />`}
+ for(let i=0;i<22;i++){const y=20+i*40;o+=`<path d="M8,${y} q10,10 0,20 q-10,10 0,20" /><path d="M1592,${y} q-10,10 0,20 q10,10 0,20" />`}
+ document.getElementById("land").innerHTML=`<rect width="1600" height="900" fill="#fbf1cf"/><rect x="3" y="3" width="1594" height="894" fill="none" stroke="#2f86c4" stroke-width="22"/><g fill="none" stroke="#e8c66a" stroke-width="3">${o}</g><rect x="22" y="22" width="1556" height="856" fill="none" stroke="#e0b94f" stroke-width="3"/>`;}
 
-/* ---------- tree ---------- */
-const svg=d3.select("#tree"),g=svg.append("g"),gTrunk=g.append("g"),gF=g.append("g").attr("opacity",.9),gl=g.append("g"),gn=g.append("g");
-gTrunk.html(`<defs><linearGradient id="bark" x1="0" x2="1"><stop offset="0" style="stop-color:var(--bark2)"/><stop offset=".45" style="stop-color:var(--bark)"/><stop offset="1" style="stop-color:var(--bark2)"/></linearGradient></defs>
- <path d="M-40,230 C-28,160 -22,80 -16,0 L16,0 C22,80 28,160 40,230 Z" fill="url(#bark)"/>
- <path d="M-36,222 C-76,232 -116,245 -156,248 M36,222 C76,234 116,242 166,246 M-18,226 C-38,245 -58,252 -88,256 M20,226 C38,245 68,252 98,256" stroke="var(--bark2)" stroke-width="10" fill="none" stroke-linecap="round"/>
- <path d="M-8,210 C-4,150 -10,100 -4,40 M10,200 C6,140 12,90 6,30" stroke="var(--bark2)" stroke-width="3" fill="none" opacity=".5"/>`);
-const zoom=d3.zoom().scaleExtent([.1,3]).on("zoom",e=>g.attr("transform",e.transform));svg.call(zoom).on("dblclick.zoom",null);
-const open=new Set([ALASH.id,...ALASH.children.map(c=>c.id)]);
-let sel=null,fitted=false;
-const vis=n=>({...n,_n:n,children:open.has(n.id)?n.children.map(vis):[]});
-const LEAF="M0,0 C7,-9 22,-10 34,0 C22,10 7,9 0,0Z";
+/* ---------- poster tree ---------- */
+const svg=d3.select("#tree"),g=svg.append("g"),gFol=g.append("g"),gTr=g.append("g"),gO=g.append("g"),gB=g.append("g"),gT=g.append("g"),gN=g.append("g");
+const open=new Set();let sel=null,fitted=false;
+const CX=1000,CY=1260;
+const SECT={"Ұлы жүз":[-2.5,-1.2,920],"Орта жүз":[-1.16,1.16,1020],"Кіші жүз":[1.2,2.0,920],"Жүзден тыс":[2.08,2.3,760]};
+const ZF={"Ұлы жүз":"#f4dc86","Орта жүз":"#bfe2f3","Кіші жүз":"#f4d7cb","Жүзден тыс":"#ddd1f0"};
+const pos=(a,r)=>[CX+r*Math.sin(a)*1.05,CY-r*Math.cos(a)*1.0];
+const LY={};
+{LY[ALASH.id]={a:0,r:0,x:CX,y:CY-40};
+ for(const z of ALASH.children){const[a0,a1,R1]=SECT[z.name]||[2.5,2.8,700];
+  const h=d3.hierarchy(z,d=>d.children.length?d.children:null),lv=h.leaves().length;
+  d3.cluster().size([a1-a0,1]).separation((a,b)=>a.parent===b.parent?1:1.35)(h);
+  const pitch=(a1-a0)*R1/lv,wl=Math.max(7,Math.min(22,pitch*.86));
+  h.each(d=>{const R0=260;const r=R0+d.y*(R1-R0);const a=a0+d.x;const[x,y]=pos(a,r);
+    LY[d.data.id]={a,r,x,y,leaves:d.leaves().length,w:d.children?Math.min(64,wl+4.6*Math.sqrt(d.leaves().length)):wl,fs:d.children?0:Math.min(15,wl*.7)}});
+  LY[z.id].w=72;}}
+function linkD(s,t,rev){const rm=(s.r+t.r)/2,c1=pos(s.a,rm),c2=pos(t.a,rm),isR=s===LY[ALASH.id],S=isR?[CX+Math.max(-100,Math.min(115,Math.sin(t.a)*110)),CY-60+Math.max(0,-Math.cos(t.a))*90]:[s.x,s.y];
+  if(isR){c1[0]=S[0]+Math.sin(t.a)*20;c1[1]=S[1]-140*Math.max(.2,Math.cos(t.a)+.4)}
+  return rev?`M${t.x},${t.y}C${c2[0]},${c2[1]} ${c1[0]},${c1[1]} ${S[0]},${S[1]}`:`M${S[0]},${S[1]}C${c1[0]},${c1[1]} ${c2[0]},${c2[1]} ${t.x},${t.y}`}
+const zoom=d3.zoom().scaleExtent([.15,8]).on("zoom",e=>g.attr("transform",e.transform));svg.call(zoom).on("dblclick.zoom",null);
+const TRK={kk:["АЛАШ","ҚАЗАҚ","Сақ","Ғұн","Скиф","Үйсін · Қаңлы · Алан","Қыпшақ · Оғыз · Қимақ"],ru:["АЛАШ","КАЗАХИ","Саки","Гунны","Скифы","Усуни · Канглы · Аланы","Кыпчаки · Огузы · Кимаки"],en:["ALASH","KAZAKHS","Saka","Huns","Scythians","Wusun · Kangly · Alans","Kipchaks · Oghuz · Kimeks"]};
 function render(focus){
-  const h=d3.hierarchy(vis(ALASH),d=>d.children.length?d.children:null);
-  const leaves=h.leaves().length,span=Math.min(Math.PI*0.9,1.1+leaves*0.07);
-  d3.tree().size([span,1]).separation((a,b)=>(a.parent===b.parent?1:1.6)/Math.max(1,a.depth*0.7))(h);
-  h.each(d=>{d.a=d.x-span/2;d.r=d.depth?150+(d.depth-1)*210+Math.max(0,d.depth-2)*50:0;d.px=d.r*Math.sin(d.a);d.py=-d.r*Math.cos(d.a)});
-  gF.html(h.descendants().filter(d=>d.depth).map(d=>`<circle cx="${d.px.toFixed(0)}" cy="${d.py.toFixed(0)}" r="${[0,110,85,60,48,40][d.depth]||36}" fill="${d.depth%2?'#3f8f3a':'#5aa845'}" opacity=".22"/>`).join(""));
-  const onPath=sel?new Set(path(sel).map(p=>p.id)):new Set();
-  const lk=gl.selectAll("path").data(h.links(),d=>d.target.data.id);
-  lk.exit().remove();
-  lk.enter().append("path").attr("class","lk").attr("fill","none").attr("stroke-linecap","round").attr("opacity",0).merge(lk)
-    .transition().duration(380).attr("opacity",1).attr("d",d3.linkRadial().angle(d=>d.a).radius(d=>d.r))
-    .attr("stroke",d=>onPath.has(d.target.data.id)?"var(--hi)":"var(--bark)")
-    .attr("stroke-width",d=>[0,22,12,7,4.5,3,2.5][d.target.depth]||2);
-  const nd=gn.selectAll("g.nd").data(h.descendants(),d=>d.data.id);
-  nd.exit().remove();
-  const en=nd.enter().append("g").attr("class","nd").style("cursor","pointer")
-    .on("click",(e,d)=>{const n=d.data._n;if(n.children.length){open.has(n.id)&&sel===n?close(n):open.add(n.id)}pick(n,false)});
-  en.attr("opacity",0).on("mouseenter",(e,d)=>hover(d.data._n,e)).on("mousemove",(e,d)=>hover(d.data._n,e)).on("mouseleave",()=>hover(null));
-  en.append("circle").attr("class","hit");
-  en.append("path").attr("class","leaf");en.append("circle").attr("class","bud");en.append("text").attr("class","lb");en.append("text").attr("class","ct");
-  en.merge(nd).each(function(d){
-    const n=d.data._n,el=d3.select(this),right=d.a>=0,deg=d.a*180/Math.PI,isSel=sel===n,collapsed=n.children.length&&!open.has(n.id);
-    if(d.depth===0){el.attr("opacity",1).attr("transform","translate(0,0)");el.select(".hit").attr("r",0);el.select(".leaf").attr("d",null);el.select(".bud").attr("r",0);
-      el.select(".lb").attr("x",0).attr("y",130).attr("dy",null).attr("text-anchor","middle").attr("transform","rotate(-90 0 130)").text(nm(n).toUpperCase()).attr("font-size",30).attr("font-weight",800).attr("fill","#fff5dc").attr("stroke","none").attr("stroke-width",0).style("paint-order","stroke").attr("letter-spacing",4);el.select(".ct").text("");return}
-    const rot=right?deg-90:deg+90,s=[0,1.5,1.15,.95,.8,.7,.65][d.depth]||.6,dir=right?1:-1;
-    el.transition().duration(380).attr("opacity",1).attr("transform",`translate(${d.px},${d.py}) rotate(${rot})`);
-    el.select(".leaf").attr("d",LEAF).attr("transform",`scale(${dir*s},${s})`).attr("fill",color(n)).attr("stroke",isSel?"#ffcc00":"#fff").attr("stroke-width",isSel?3:1.2);
-    el.select(".hit").attr("cx",dir*22*s).attr("r",26);
-    el.select(".bud").attr("r",collapsed?7*s+3:0).attr("cx",dir*34*s).attr("fill","#fff").attr("stroke",color(n)).attr("stroke-width",2.5);
-    el.select(".ct").attr("x",dir*34*s).attr("dy","0.35em").attr("text-anchor","middle").attr("font-size",Math.max(9,9*s)).attr("font-weight",700).attr("fill",color(n)).text(collapsed?"+":"");
-    el.select(".lb").attr("x",dir*(34*s+(collapsed?10*s+6:6))).attr("y",0).attr("dy","0.34em").attr("text-anchor",right?"start":"end").attr("transform",null)
-      .attr("font-family","Nunito, sans-serif").attr("font-weight",d.depth<3||isSel?800:700).attr("font-size",[0,30,22,17,15,14,13][d.depth]||13)
-      .attr("fill",isSel?color(n):"var(--ink)").attr("stroke","var(--halo)").attr("stroke-width",5).style("paint-order","stroke").attr("stroke-linejoin","round").attr("letter-spacing",null)
-      .text(nm(n)+(collapsed?` · ${desc(n)}`:""));
-  });
-  if(focus){const t=h.descendants().find(d=>d.data._n===focus);if(t){const r=svg.node().getBoundingClientRect(),k=Math.max(d3.zoomTransform(svg.node()).k,1.15);svg.transition().duration(650).call(zoom.transform,d3.zoomIdentity.translate(r.width/2-t.px*k,r.height*.55-t.py*k).scale(k))}}
+  const nodes=ALL.filter(n=>n!==ALASH),onPath=sel?new Set(path(sel).map(p=>p.id)):new Set();
+  /* foliage rim */
+  gFol.html(nodes.filter(n=>!n.children.length).map(n=>{const p=LY[n.id];const[x,y]=pos(p.a,p.r+18);return`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="58" fill="#6fae55"/>`}).join("")+nodes.filter(n=>!n.children.length).map(n=>{const p=LY[n.id];const[x,y]=pos(p.a,p.r+40);return`<circle cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="40" fill="#4f8f3e"/>`}).join(""));
+  /* trunk + roots */
+  const tk=TRK[L]||TRK.kk;
+  gTr.html(`<defs><linearGradient id="tg" x1="0" x2="1"><stop offset="0" stop-color="#f2c04e"/><stop offset=".5" stop-color="#fbe08a"/><stop offset="1" stop-color="#f0b743"/></linearGradient></defs>
+   <path d="M${CX-120},${CY-60} C${CX-90},${CY+200} ${CX-110},${CY+420} ${CX-200},${CY+560} L${CX+200},${CY+560} C${CX+110},${CY+420} ${CX+90},${CY+200} ${CX+120},${CY-60}Z" fill="url(#tg)" stroke="#2c3b3b" stroke-width="4"/>
+   <path d="M${CX-200},${CY+552} C${CX-380},${CY+600} ${CX-560},${CY+610} ${CX-760},${CY+640} L${CX-740},${CY+660} C${CX-520},${CY+650} ${CX-330},${CY+640} ${CX-120},${CY+600}Z M${CX+200},${CY+552} C${CX+380},${CY+600} ${CX+560},${CY+610} ${CX+760},${CY+640} L${CX+740},${CY+660} C${CX+520},${CY+650} ${CX+330},${CY+640} ${CX+120},${CY+600}Z M${CX-90},${CY+560} C${CX-60},${CY+640} ${CX-20},${CY+700} ${CX-40},${CY+760} L${CX+40},${CY+760} C${CX+30},${CY+700} ${CX+70},${CY+640} ${CX+90},${CY+560}Z" fill="#7a4a2a"/>
+   <rect x="${CX-200}" y="${CY+540}" width="400" height="60" fill="#7a4a2a"/>
+   <text x="${CX}" y="${CY+120}" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="84" fill="#c0392b">${esc(tk[0])}</text>
+   <text x="${CX}" y="${CY+200}" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="56" fill="#c0392b">${esc(tk[1])}</text>
+   <text x="${CX}" y="${CY+290}" text-anchor="middle" font-family="Nunito" font-weight="700" font-size="30" fill="#b5651d">${esc(tk[5])}</text>
+   <text x="${CX}" y="${CY+340}" text-anchor="middle" font-family="Nunito" font-weight="700" font-size="30" fill="#b5651d">${esc(tk[6])}</text>
+   <text x="${CX-520}" y="${CY+612}" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="40" fill="#fff">${esc(tk[4])}</text>
+   <text x="${CX+520}" y="${CY+612}" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="40" fill="#fff">${esc(tk[3])}</text>
+   <text x="${CX}" y="${CY+720}" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="40" fill="#fff">${esc(tk[2])}</text>`);
+  /* branches: outline, fill, text */
+  const ord=nodes.slice().sort((a,b)=>b.depth-a.depth);
+  let o="",f="",t="";
+  for(const n of ord){const s=LY[n.parent.id],c=LY[n.id],w=c.w,on=onPath.has(n.id);
+    const d=linkD(s,c,false);o+=`<path d="${d}" stroke="#2c3b3b" stroke-width="${(w+5).toFixed(1)}"/>`;
+    f+=`<path class="bf${on?" on":""}" data-id="${n.id}" d="${d}" stroke="${on?"#f2b930":ZF[n.zhuz]}" stroke-width="${w.toFixed(1)}"/>`;
+    const rev=c.x<s.x-1,dt=linkD(s,c,rev),len=Math.hypot(c.x-s.x,c.y-s.y)*1.05,name=nm(n);
+    let fs=n.depth===1?40:c.fs||Math.min(26,w*.55);fs=Math.max(6,Math.min(fs,len*.74/(name.length*.6)));
+    t+=`<path id="tp${n.id}" d="${dt}" fill="none" stroke="none"/><text data-id="${n.id}" font-family="Nunito" font-weight="${n.depth<3||on?800:700}" font-size="${fs.toFixed(1)}" fill="${on?"#5a3b00":"#1f2a2a"}" dy="${(fs*.35).toFixed(1)}"><textPath href="#tp${n.id}" startOffset="50%" text-anchor="middle">${esc(name)}</textPath></text>`}
+  gO.attr("fill","none").attr("stroke-linecap","round").html(o);gB.attr("fill","none").attr("stroke-linecap","round").html(f);gT.html(t);
+  const A=LY[ALASH.id];gN.html(`<circle cx="${A.x}" cy="${A.y}" r="${sel===ALASH?46:38}" fill="${sel===ALASH?"#f2b930":"#fbe08a"}" stroke="#2c3b3b" stroke-width="4" data-id="${ALASH.id}"/>`);
+  g.selectAll("[data-id]").style("cursor","pointer").on("click",e=>{e.stopPropagation();pick(byId[e.currentTarget.dataset.id],true)})
+   .on("mouseenter",e=>hover(byId[e.currentTarget.dataset.id],e)).on("mousemove",e=>hover(byId[e.currentTarget.dataset.id],e)).on("mouseleave",()=>hover(null));
+  if(focus)focusOn(focus);
+  drawSteps();
 }
+function focusOn(n){const r=svg.node().getBoundingClientRect();if(!r.width)return;
+  if(n===ALASH){fit();return}
+  const ids=[n,...n.children].map(x=>LY[x.id]),pp=path(n).slice(1).map(x=>LY[x.id]);
+  const xs=[...ids,...pp.slice(-2)].map(p=>p.x),ys=[...ids,...pp.slice(-2)].map(p=>p.y);
+  const x0=Math.min(...xs)-90,x1=Math.max(...xs)+90,y0=Math.min(...ys)-90,y1=Math.max(...ys)+90;
+  const k=Math.min(6,.9*Math.min(r.width/(x1-x0),r.height/(y1-y0)));
+  svg.transition().duration(650).call(zoom.transform,d3.zoomIdentity.translate(r.width/2-(x0+x1)/2*k,r.height/2-(y0+y1)/2*k).scale(k))}
+function fit(){const b=g.node().getBBox(),r=svg.node().getBoundingClientRect();if(!r.width||!b.width)return;const k=.97*Math.min(r.width/b.width,r.height/b.height);svg.transition().duration(550).call(zoom.transform,d3.zoomIdentity.translate(r.width/2-(b.x+b.width/2)*k,r.height/2-(b.y+b.height/2)*k).scale(k))}
+document.getElementById("zin").onclick=()=>svg.transition().call(zoom.scaleBy,1.4);
+document.getElementById("zout").onclick=()=>svg.transition().call(zoom.scaleBy,1/1.4);
+document.getElementById("zfit").onclick=fit;
+document.getElementById("zall").onclick=()=>{sel=ALASH;render();fit();drawCard()};
+document.getElementById("tree").addEventListener("pointerdown",()=>{const h=document.querySelector(".hint");if(h)h.remove()},{once:true});
+setTimeout(()=>{const h=document.querySelector(".hint");if(h){h.style.transition="opacity .6s";h.style.opacity=0;setTimeout(()=>h.remove(),700)}},6000);
 const tip=document.getElementById("tip");
-function hover(n,e){const ids=n?new Set(path(n).map(p=>p.id)):null;gl.selectAll("path").classed("hov",d=>!!ids&&ids.has(d.target.data.id));
-  if(!n){tip.style.opacity=0;return}const r=document.getElementById("stage").getBoundingClientRect(),dn=desc(n);
+function hover(n,e){g.selectAll(".bf").classed("hv",false);if(!n){tip.style.opacity=0;return}
+  const ids=new Set(path(n).map(p=>p.id));g.selectAll(".bf").classed("hv",function(){return ids.has(this.dataset.id)});
+  const r=document.getElementById("stage").getBoundingClientRect(),dn=desc(n);
   tip.innerHTML=`<b style="color:${color(n)}">${esc(nm(n))}</b>${esc(path(n).slice(1,-1).map(nm).join(" › "))}${dn?`<br>${esc(T("items")(dn))}`:""}`;
   let x=e.clientX-r.left+14,y=e.clientY-r.top+14;if(x>r.width-270)x-=290;tip.style.left=x+"px";tip.style.top=y+"px";tip.style.opacity=1}
-function close(n){open.delete(n.id);for(const c of n.children)close(c)}
-function fit(){const b=g.node().getBBox(),r=svg.node().getBoundingClientRect();if(!r.width||!b.width)return;const k=Math.min(1.5,.92*Math.min(r.width*(r.width<600?1.35:1)/b.width,(r.height-40)/b.height));svg.transition().duration(550).call(zoom.transform,d3.zoomIdentity.translate(r.width/2-(b.x+b.width/2)*k,r.height-8-(b.y+b.height)*k).scale(k))}
-document.getElementById("zin").onclick=()=>svg.transition().call(zoom.scaleBy,1.3);
-document.getElementById("zout").onclick=()=>svg.transition().call(zoom.scaleBy,1/1.3);
-document.getElementById("zfit").onclick=fit;
-let allOpen=false;document.getElementById("zall").onclick=()=>{allOpen=!allOpen;if(allOpen)ALL.forEach(n=>n.children.length&&open.add(n.id));else{close(ALASH);open.add(ALASH.id);ALASH.children.forEach(c=>open.add(c.id))}render();setTimeout(fit,60)};
-document.getElementById("tree").addEventListener("pointerdown",()=>{const h=document.querySelector(".hint");if(h)h.remove()},{once:true});
+/* step strip under the tree */
+function drawSteps(){const box=document.getElementById("tsteps");if(!box)return;const n=sel||ALASH,pp=path(n);
+  box.innerHTML=`<div class="tcr">${pp.map((p,i)=>`<button data-id="${p.id}" style="--c:${color(p)}"><i>${i+1}</i>${esc(nm(p))}</button>`).join('<span>›</span>')}</div>
+   ${n.children.length?`<div class="tnext"><small>${esc(T("next")(T("LV")[Math.min(n.depth+1,6)]))}</small><div>${n.children.map(k=>`<button data-id="${k.id}" style="--c:${color(k)}">${esc(nm(k))}${k.children.length?` <em>${desc(k)}</em>`:""}</button>`).join("")}</div></div>`:`<div class="tnext"><small>${esc(T("rtDone"))}</small><div><button class="pri" id="ts-orn">✦ ${esc(T("ornBtn"))}</button><button id="ts-mine">${esc(T("mine"))}</button></div></div>`}
+   ${n!==ALASH?`<button class="tback" id="ts-back">${esc(T("back"))}</button>`:""}`;
+  box.querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>pick(byId[b.dataset.id],true));
+  const bk=document.getElementById("ts-back");if(bk)bk.onclick=()=>pick(n.parent,true);
+  const o=document.getElementById("ts-orn");if(o)o.onclick=()=>openOrn(n);
+  const m=document.getElementById("ts-mine");if(m)m.onclick=()=>{me.ru=n.id;saveMe();drawMe();tab("me")};
+}
 
 /* ---------- card ---------- */
 const card=document.getElementById("card");
 function pick(n,center=true,noHash){
-  sel=n;for(const p of path(n).slice(0,-1))open.add(p.id);
-  if(center&&n.children.length)open.add(n.id);
+  sel=n;
   render(center?n:null);drawCard();if(!noHash&&document.getElementById("v-tree").classList.contains("on"))setHash("t-"+n.id);cur=n;try{localStorage.setItem("baiterek-route",n.id)}catch(e){}drawRoute();
 }
 function drawCard(){
@@ -797,7 +822,7 @@ function drawCard(){
   const alt=L==="kk"?(n.ru||"").replace(/ \([^)]*\)$/,""):n.name;
   card.innerHTML=`<div class="crumbs">${pp.map(p=>`<button data-id="${p.id}">${esc(nm(p))}</button>`).join("<span>›</span>")}</div>
    <h2 style="color:${c}">${esc(nm(n))}</h2>${n.zhuz?`<span class="tag" style="background:${c}">${esc(zn(n.zhuz))}</span>`:""}
-   <dl>${alt&&alt!==nm(n)?`<dt>${T("alt")}</dt><dd>${esc(alt)}</dd>`:""}<dt>${T("gen")}</dt><dd>${esc(T("genv")(n.depth))}</dd>
+   <dl>${alt&&alt!==nm(n)?`<dt>${T("alt")}</dt><dd>${esc(alt)}</dd>`:""}<dt>${T("gen")}</dt><dd>${esc(T("stepOf")(n.depth+1))}</dd>
    ${n.uran?`<dt>${T("uran")}</dt><dd>«${esc(uranTx(n.uran))}!»</dd>`:""}${n.reg?`<dt>${T("reg")}</dt><dd>${esc(tr("REG",n.reg))}</dd>`:""}
    ${n.pop?`<dt>${T("pop")}</dt><dd>${esc(T("popv")(fmt(n.pop)))}</dd>`:""}${n.children.length?`<dt>${T("kids")}</dt><dd>${esc(T("kidsv")(n.children.length,dn))}</dd>`:""}</dl>
    ${n.note?`<p class="note">${esc(tr("NOTE",n.note))}</p>`:""}
@@ -921,7 +946,7 @@ document.addEventListener("click",e=>{if(!e.target.closest(".search"))res.style.
 /* ---------- tabs ---------- */
 let skipHash=null;
 function setHash(h){if(location.hash.slice(1)!==h){skipHash=h;location.hash=h}}
-function tab(v,noHash){const was=document.getElementById("v-"+v).classList.contains("on");if(!was)scrollTo({top:0});document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v));document.querySelectorAll(".view").forEach(x=>x.classList.toggle("on",x.id==="v-"+v));if(!noHash)setHash(v==="route"?"r-"+cur.id:v==="tree"&&sel&&sel!==ALASH?"t-"+sel.id:v);if(v==="tree")setTimeout(()=>{const f=sel&&sel.depth>1?sel:null;if(!fitted){fitted=true;render();fit();if(f)setTimeout(()=>render(f),600)}else render(f)},0)}
+function tab(v,noHash){const was=document.getElementById("v-"+v).classList.contains("on");if(!was)scrollTo({top:0});document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v));document.querySelectorAll(".view").forEach(x=>x.classList.toggle("on",x.id==="v-"+v));if(!noHash)setHash(v==="route"?"r-"+cur.id:v==="tree"&&sel&&sel!==ALASH?"t-"+sel.id:v);if(v==="tree")setTimeout(()=>{const f=sel&&sel!==ALASH?sel:null;render();if(!fitted){fitted=true;fit();if(f)setTimeout(()=>focusOn(f),650)}else if(f)focusOn(f)},0)}
 let landDone=false;
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>tab(b.dataset.v));
 
